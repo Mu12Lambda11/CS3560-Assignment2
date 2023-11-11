@@ -1,6 +1,8 @@
 package com.mycompany.cs3560.assignment2;
 
-public class AdminControlDriver {
+import com.mycompany.cs3560.assignment2.DesignPatterns.Singleton;
+
+public class AdminControlDriver extends Singleton{
     private int totalUsers=0;
     private int totalGroups=0;
     private int totalPosts=0;
