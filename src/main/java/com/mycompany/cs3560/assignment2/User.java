@@ -11,6 +11,11 @@ public class User implements Component {
     private ArrayList<String> userFollowing = new ArrayList<String>();
     private ArrayList<String> userNews = new ArrayList<String>();
 
+    //Constructor Patterns
+    User(String givenID){
+        userID=givenID;
+    }
+
     //Observer Pattern methods
 
     //subject method to make a post

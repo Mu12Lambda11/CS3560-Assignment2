@@ -8,6 +8,10 @@ public class UserGroup implements Component{
     private String userGroupID="";
     private ArrayList<Object> holder = new ArrayList<Object>();
 
+    //Constructor
+    UserGroup(String givenID){
+        userGroupID=givenID;
+    }
 
     //Composite Pattern
     @Override
@@ -18,6 +22,11 @@ public class UserGroup implements Component{
             if(obj.getClass().getName().equals("User")){
                 User tempUser = (User)obj;
                 tempUser.displayContent(); 
+            }
+
+            if(obj.getClass().getName().equals("UserGroup")){
+                UserGroup tempGroup = (UserGroup)obj;
+                System.out.println("Group: "+ tempGroup.getUserGroupID());
             }
         }
     }
