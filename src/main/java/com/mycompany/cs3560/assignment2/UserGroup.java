@@ -1,12 +1,26 @@
 package com.mycompany.cs3560.assignment2;
 
 import java.util.ArrayList;
-import java.util.Random;
 
-public class UserGroup {
+import com.mycompany.cs3560.assignment2.DesignPatterns.CompositePattern.Component;
+
+public class UserGroup implements Component{
     private String userGroupID="";
     private ArrayList<Object> holder = new ArrayList<Object>();
 
+
+    //Composite Pattern
+    @Override
+    public void displayContent() {
+        for (int i = 0; i < holder.size(); i++) {
+            Object obj = holder.get(i);
+
+            if(obj.getClass().getName().equals("User")){
+                User tempUser = (User)obj;
+                tempUser.displayContent(); 
+            }
+        }
+    }
 
     public void addUser(User givenUser){
         if(!holder.contains(givenUser)){
@@ -33,4 +47,5 @@ public class UserGroup {
     public void setUserGroupID(String userGroupID) {
         this.userGroupID = userGroupID;
     }
+
 }

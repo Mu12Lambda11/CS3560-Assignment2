@@ -2,9 +2,10 @@ package com.mycompany.cs3560.assignment2;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Random;
 
-public class User {
+import com.mycompany.cs3560.assignment2.DesignPatterns.CompositePattern.Component;
+
+public class User implements Component {
     private String userID ="";
     private ArrayList<String> userFollowers= new ArrayList<String>();
     private ArrayList<String> userFollowing = new ArrayList<String>();
@@ -43,7 +44,11 @@ public class User {
         }
     }
 
-    
+    //Composite Pattern
+    @Override
+    public void displayContent() {
+        System.out.println("UserID:"+userID);
+    } 
 
     //All the getters and setters.
     public String getUserID() {
