@@ -1,34 +1,28 @@
 package com.mycompany.cs3560.assignment2;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class UserGroup {
     private String userGroupID="";
-    private ArrayList holder = new ArrayList<Object>();
+    private ArrayList<Object> holder = new ArrayList<Object>();
 
 
-    public void addUser(User user){
-        
+    public void addUser(User givenUser){
+        if(!holder.contains(givenUser)){
+            holder.add(givenUser);
+        }
     }
 
     public void addGroup(UserGroup userGroup){
-
-    }
-
-    public void generateID(){
-        
+        if(!holder.contains(userGroup)){
+            holder.add(userGroup);
+        }
     }
     
-    public void checkID(User user){
-
-    }
-
-    public void checkID(UserGroup userGroup){
-
-    }
     
     //Getters and Setters
-    public ArrayList getHolder() {
+    public ArrayList<Object> getHolder() {
         return holder;
     }
 

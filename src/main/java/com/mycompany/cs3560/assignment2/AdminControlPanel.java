@@ -1,11 +1,15 @@
 package com.mycompany.cs3560.assignment2;
 
+import java.util.Hashtable;
+
 public class AdminControlPanel extends javax.swing.JFrame {
     //data variables
-    private int totalUsers=0;
-    private int totalGroups=0;
     private int totalPosts=0;
     private float posPercentage=0;
+
+    //variables for holding total users
+    private static Hashtable<String, User> allUsers = new Hashtable<>();
+    private Hashtable<String, UserGroup> allGroups = new Hashtable<>();
 
     //singleton
     protected static AdminControlPanel instance = null;
@@ -18,7 +22,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
     }
 
     /**
-     * Creates new form UserView
+     * Creates new form AdminControlPanel
      */
     public AdminControlPanel() {
         initComponents();
@@ -26,16 +30,10 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
         //All the getters and setters
     public int getTotalUsers() {
-        return totalUsers;
-    }
-    public void setTotalUsers(int totalUsers) {
-        this.totalUsers = totalUsers;
+        return allUsers.size();
     }
     public int getTotalGroups() {
-        return totalGroups;
-    }
-    public void setTotalGroups(int totalGroups) {
-        this.totalGroups = totalGroups;
+        return allGroups.size();
     }
     public int getTotalPosts() {
         return totalPosts;
@@ -46,8 +44,11 @@ public class AdminControlPanel extends javax.swing.JFrame {
     public float getPosPercentage() {
         return posPercentage;
     }
-    public void setPosPercentage(float posPercentage) {
-        this.posPercentage = posPercentage;
+    public static Hashtable<String, User> getAllUsers() {
+        return allUsers;
+    }
+    public Hashtable<String, UserGroup> getAllGroups() {
+        return allGroups;
     }
 
     /**
@@ -62,25 +63,25 @@ public class AdminControlPanel extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTree1 = new javax.swing.JTree();
-        jButton1 = new javax.swing.JButton();
+        userGroupTree = new javax.swing.JTree();
+        userViewBtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        userTextArea = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        groupTextArea = new javax.swing.JTextArea();
+        userTotalBtn = new javax.swing.JButton();
+        groupTotalBtn = new javax.swing.JButton();
+        msgTotalBtn = new javax.swing.JButton();
+        posPercentBtn = new javax.swing.JButton();
+        addUserBtn = new javax.swing.JButton();
+        addGroupBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
-        jTree1.setBackground(new java.awt.Color(102, 204, 255));
-        jScrollPane5.setViewportView(jTree1);
+        userGroupTree.setBackground(new java.awt.Color(102, 204, 255));
+        jScrollPane5.setViewportView(userGroupTree);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -93,38 +94,38 @@ public class AdminControlPanel extends javax.swing.JFrame {
             .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
         );
 
-        jButton1.setBackground(new java.awt.Color(51, 102, 255));
-        jButton1.setText("Open User View");
+        userViewBtn.setBackground(new java.awt.Color(51, 102, 255));
+        userViewBtn.setText("Open User View");
 
-        jTextArea1.setBackground(new java.awt.Color(153, 204, 255));
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("UserID");
-        jScrollPane1.setViewportView(jTextArea1);
+        userTextArea.setBackground(new java.awt.Color(153, 204, 255));
+        userTextArea.setColumns(20);
+        userTextArea.setRows(5);
+        userTextArea.setText("UserID");
+        jScrollPane1.setViewportView(userTextArea);
 
-        jTextArea3.setBackground(new java.awt.Color(153, 204, 255));
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(5);
-        jTextArea3.setText("GroupID");
-        jScrollPane3.setViewportView(jTextArea3);
+        groupTextArea.setBackground(new java.awt.Color(153, 204, 255));
+        groupTextArea.setColumns(20);
+        groupTextArea.setRows(5);
+        groupTextArea.setText("GroupID");
+        jScrollPane3.setViewportView(groupTextArea);
 
-        jButton2.setBackground(new java.awt.Color(51, 102, 255));
-        jButton2.setText("Show User Total");
+        userTotalBtn.setBackground(new java.awt.Color(51, 102, 255));
+        userTotalBtn.setText("Show User Total");
 
-        jButton3.setBackground(new java.awt.Color(51, 102, 255));
-        jButton3.setText("Show Group Total");
+        groupTotalBtn.setBackground(new java.awt.Color(51, 102, 255));
+        groupTotalBtn.setText("Show Group Total");
 
-        jButton4.setBackground(new java.awt.Color(51, 102, 255));
-        jButton4.setText("<html>Show Messages Total</html>");
+        msgTotalBtn.setBackground(new java.awt.Color(51, 102, 255));
+        msgTotalBtn.setText("<html>Show Messages Total</html>");
 
-        jButton5.setBackground(new java.awt.Color(51, 102, 255));
-        jButton5.setText("<html> Show Positive Percentage </html>");
+        posPercentBtn.setBackground(new java.awt.Color(51, 102, 255));
+        posPercentBtn.setText("<html> Show Positive Percentage </html>");
 
-        jButton6.setBackground(new java.awt.Color(153, 204, 255));
-        jButton6.setText("Add User");
+        addUserBtn.setBackground(new java.awt.Color(153, 204, 255));
+        addUserBtn.setText("Add User");
 
-        jButton7.setBackground(new java.awt.Color(153, 204, 255));
-        jButton7.setText("Add Group");
+        addGroupBtn.setBackground(new java.awt.Color(153, 204, 255));
+        addGroupBtn.setText("Add Group");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -138,20 +139,20 @@ public class AdminControlPanel extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(addUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(userTotalBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(groupTotalBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(msgTotalBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(posPercentBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(userViewBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(addGroupBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(31, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -164,22 +165,22 @@ public class AdminControlPanel extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                            .addComponent(addUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                            .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(addGroupBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(userViewBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(groupTotalBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                            .addComponent(userTotalBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton5)
-                            .addComponent(jButton4))
+                            .addComponent(posPercentBtn)
+                            .addComponent(msgTotalBtn))
                         .addGap(41, 41, 41))))
         );
 
@@ -234,22 +235,20 @@ public class AdminControlPanel extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton addGroupBtn;
+    private javax.swing.JButton addUserBtn;
+    private javax.swing.JTextArea groupTextArea;
+    private javax.swing.JButton groupTotalBtn;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTree jTree1;
+    private javax.swing.JButton msgTotalBtn;
+    private javax.swing.JButton posPercentBtn;
+    private javax.swing.JTree userGroupTree;
+    private javax.swing.JTextArea userTextArea;
+    private javax.swing.JButton userTotalBtn;
+    private javax.swing.JButton userViewBtn;
     // End of variables declaration//GEN-END:variables
 }
