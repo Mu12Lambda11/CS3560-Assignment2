@@ -2,6 +2,9 @@ package com.mycompany.cs3560.assignment2;
 
 import java.util.Hashtable;
 
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+
 public class AdminControlPanel extends javax.swing.JFrame {
     //data variables
     private int totalPosts=0;
@@ -10,6 +13,10 @@ public class AdminControlPanel extends javax.swing.JFrame {
     //variables for holding total users
     private static Hashtable<String, User> allUsers = new Hashtable<>();
     private Hashtable<String, UserGroup> allGroups = new Hashtable<>();
+
+    //root and rootNode
+    UserGroup root=null;
+    DefaultMutableTreeNode rootNode=null;
 
     //singleton
     protected static AdminControlPanel instance = null;
@@ -60,10 +67,25 @@ public class AdminControlPanel extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        userTotalDialog = new javax.swing.JDialog();
+        userTotalText = new javax.swing.JTextField();
+        groupTotalDialog = new javax.swing.JDialog();
+        groupTotalText = new javax.swing.JTextField();
+        msgTotalDialog = new javax.swing.JDialog();
+        msgTotalText = new javax.swing.JTextField();
+        posPercentDialog = new javax.swing.JDialog();
+        posPercentText = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         userGroupTree = new javax.swing.JTree();
+
+        //initilaize the root usergroup as the root node in jtree
+        root = new UserGroup("Root");
+        allGroups.put(root.getUserGroupID(), root);
+        rootNode = new DefaultMutableTreeNode(root.getUserGroupID()+"*G*");
+        userGroupTree= new JTree(rootNode);
+
         userViewBtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         userTextArea = new javax.swing.JTextArea();
@@ -75,6 +97,101 @@ public class AdminControlPanel extends javax.swing.JFrame {
         posPercentBtn = new javax.swing.JButton();
         addUserBtn = new javax.swing.JButton();
         addGroupBtn = new javax.swing.JButton();
+
+        userTotalDialog.setTitle("User Total");
+
+        userTotalText.setEditable(false);
+        userTotalText.setText("User Total: "+ allUsers.size());
+
+
+        javax.swing.GroupLayout userTotalDialogLayout = new javax.swing.GroupLayout(userTotalDialog.getContentPane());
+        userTotalDialog.getContentPane().setLayout(userTotalDialogLayout);
+        userTotalDialogLayout.setHorizontalGroup(
+            userTotalDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(userTotalDialogLayout.createSequentialGroup()
+                .addGap(138, 138, 138)
+                .addComponent(userTotalText, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(138, Short.MAX_VALUE))
+        );
+        userTotalDialogLayout.setVerticalGroup(
+            userTotalDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(userTotalDialogLayout.createSequentialGroup()
+                .addGap(110, 110, 110)
+                .addComponent(userTotalText, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(110, Short.MAX_VALUE))
+        );
+        userTotalDialog.pack();
+
+        groupTotalDialog.setTitle("Group Total");
+
+        groupTotalText.setEditable(false);
+        groupTotalText.setText("Group Total: "+ allGroups.size());
+
+        javax.swing.GroupLayout groupTotalDialogLayout = new javax.swing.GroupLayout(groupTotalDialog.getContentPane());
+        groupTotalDialog.getContentPane().setLayout(groupTotalDialogLayout);
+        groupTotalDialogLayout.setHorizontalGroup(
+            groupTotalDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(groupTotalDialogLayout.createSequentialGroup()
+                .addGap(138, 138, 138)
+                .addComponent(groupTotalText, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(138, Short.MAX_VALUE))
+        );
+        groupTotalDialogLayout.setVerticalGroup(
+            groupTotalDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(groupTotalDialogLayout.createSequentialGroup()
+                .addGap(110, 110, 110)
+                .addComponent(groupTotalText, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(110, Short.MAX_VALUE))
+        );
+        groupTotalDialog.pack();
+
+        msgTotalDialog.setTitle("Message Total");
+
+        msgTotalText.setEditable(false);
+        msgTotalText.setText("Message Total: ");
+
+
+        javax.swing.GroupLayout msgTotalDialogLayout = new javax.swing.GroupLayout(msgTotalDialog.getContentPane());
+        msgTotalDialog.getContentPane().setLayout(msgTotalDialogLayout);
+        msgTotalDialogLayout.setHorizontalGroup(
+            msgTotalDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(msgTotalDialogLayout.createSequentialGroup()
+                .addGap(138, 138, 138)
+                .addComponent(msgTotalText, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(138, Short.MAX_VALUE))
+        );
+        msgTotalDialogLayout.setVerticalGroup(
+            msgTotalDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(msgTotalDialogLayout.createSequentialGroup()
+                .addGap(110, 110, 110)
+                .addComponent(msgTotalText, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(110, Short.MAX_VALUE))
+        );
+        msgTotalDialog.pack();
+
+        posPercentDialog.setTitle("Positive Msg Percent");
+
+        posPercentText.setEditable(false);
+        posPercentText.setText("Positive Percent: ");
+
+
+        javax.swing.GroupLayout posPercentDialogLayout = new javax.swing.GroupLayout(posPercentDialog.getContentPane());
+        posPercentDialog.getContentPane().setLayout(posPercentDialogLayout);
+        posPercentDialogLayout.setHorizontalGroup(
+            posPercentDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(posPercentDialogLayout.createSequentialGroup()
+                .addGap(138, 138, 138)
+                .addComponent(posPercentText, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(138, Short.MAX_VALUE))
+        );
+        posPercentDialogLayout.setVerticalGroup(
+            posPercentDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(posPercentDialogLayout.createSequentialGroup()
+                .addGap(110, 110, 110)
+                .addComponent(posPercentText, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(110, Short.MAX_VALUE))
+        );
+        posPercentDialog.pack();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -111,21 +228,51 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
         userTotalBtn.setBackground(new java.awt.Color(51, 102, 255));
         userTotalBtn.setText("Show User Total");
+        userTotalBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userTotalBtnActionPerformed(evt);
+            }
+        });
 
         groupTotalBtn.setBackground(new java.awt.Color(51, 102, 255));
         groupTotalBtn.setText("Show Group Total");
+        groupTotalBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                groupTotalBtnActionPerformed(evt);
+            }
+        });
 
         msgTotalBtn.setBackground(new java.awt.Color(51, 102, 255));
         msgTotalBtn.setText("<html>Show Messages Total</html>");
+        msgTotalBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                msgTotalBtnActionPerformed(evt);
+            }
+        });
 
         posPercentBtn.setBackground(new java.awt.Color(51, 102, 255));
         posPercentBtn.setText("<html> Show Positive Percentage </html>");
+        posPercentBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                posPercentBtnActionPerformed(evt);
+            }
+        });
 
         addUserBtn.setBackground(new java.awt.Color(153, 204, 255));
         addUserBtn.setText("Add User");
+        addUserBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addUserBtnActionPerformed(evt);
+            }
+        });
 
         addGroupBtn.setBackground(new java.awt.Color(153, 204, 255));
         addGroupBtn.setText("Add Group");
+        addGroupBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addGroupBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -198,6 +345,35 @@ public class AdminControlPanel extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void addUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserBtnActionPerformed
+        makeUser();
+    }//GEN-LAST:event_addUserBtnActionPerformed
+
+    private void addGroupBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGroupBtnActionPerformed
+        makeGroup();
+    }//GEN-LAST:event_addGroupBtnActionPerformed
+
+    private void userTotalBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userTotalBtnActionPerformed
+        userTotalDialog.setVisible(true);
+        userTotalText.setText("User Total: "+ allUsers.size());
+    }//GEN-LAST:event_userTotalBtnActionPerformed
+
+    private void groupTotalBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_groupTotalBtnActionPerformed
+        groupTotalDialog.setVisible(true);
+        groupTotalText.setText("Group Total: "+ allGroups.size());
+    }//GEN-LAST:event_groupTotalBtnActionPerformed
+
+    private void msgTotalBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_msgTotalBtnActionPerformed
+        msgTotalDialog.setVisible(true);
+        msgTotalText.setText("Total Messages: ");
+    }//GEN-LAST:event_msgTotalBtnActionPerformed
+
+    private void posPercentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_posPercentBtnActionPerformed
+        posPercentDialog.setVisible(true);
+        posPercentText.setText("Positive Percent: ");
+    }//GEN-LAST:event_posPercentBtnActionPerformed
+
+
     /**
      * @param args the command line arguments
      */
@@ -239,16 +415,43 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private javax.swing.JButton addUserBtn;
     private javax.swing.JTextArea groupTextArea;
     private javax.swing.JButton groupTotalBtn;
+    private javax.swing.JDialog groupTotalDialog;
+    private javax.swing.JTextField groupTotalText;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JTextField posPercentText;
     private javax.swing.JButton msgTotalBtn;
+    private javax.swing.JDialog msgTotalDialog;
+    private javax.swing.JTextField msgTotalText;
     private javax.swing.JButton posPercentBtn;
+    private javax.swing.JDialog posPercentDialog;
     private javax.swing.JTree userGroupTree;
     private javax.swing.JTextArea userTextArea;
     private javax.swing.JButton userTotalBtn;
+    private javax.swing.JDialog userTotalDialog;
+    private javax.swing.JTextField userTotalText;
     private javax.swing.JButton userViewBtn;
     // End of variables declaration//GEN-END:variables
+
+    void makeUser(){
+        String tempID = userTextArea.getText();
+        User user = new User(tempID);
+        allUsers.put(tempID, user);
+        DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user.getUserID());
+        rootNode.add(userNode);
+
+
+    }
+    void makeGroup(){
+        String tempID = groupTextArea.getText();
+        UserGroup group = new UserGroup(tempID);
+        allGroups.put(tempID, group);
+        DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group.getUserGroupID()+"*G*");
+        rootNode.add(groupNode);
+        
+    }
+
 }

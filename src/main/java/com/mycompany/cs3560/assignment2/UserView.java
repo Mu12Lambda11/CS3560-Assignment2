@@ -59,6 +59,11 @@ public class UserView extends javax.swing.JFrame {
 
         followUserBtn.setBackground(new java.awt.Color(51, 102, 255));
         followUserBtn.setText("Follow User");
+        followUserBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                followUserBtnActionPerformed(evt);
+            }
+        });
 
         followList.setBackground(new java.awt.Color(102, 102, 102));
         followList.setModel(new javax.swing.AbstractListModel<String>() {
@@ -76,6 +81,11 @@ public class UserView extends javax.swing.JFrame {
 
         postTweetBtn.setBackground(new java.awt.Color(51, 102, 255));
         postTweetBtn.setText("Post Tweet");
+        postTweetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                postTweetBtnActionPerformed(evt);
+            }
+        });
 
         newsFeed.setBackground(new java.awt.Color(102, 102, 102));
         newsFeed.setModel(new javax.swing.AbstractListModel<String>() {
@@ -137,6 +147,14 @@ public class UserView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void followUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followUserBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_followUserBtnActionPerformed
+
+    private void postTweetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postTweetBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_postTweetBtnActionPerformed
 
     /**
      * @param args the command line arguments
