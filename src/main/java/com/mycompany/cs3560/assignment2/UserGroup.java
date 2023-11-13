@@ -3,8 +3,10 @@ package com.mycompany.cs3560.assignment2;
 import java.util.ArrayList;
 
 import com.mycompany.cs3560.assignment2.DesignPatterns.CompositePattern.Component;
+import com.mycompany.cs3560.assignment2.DesignPatterns.VisitorPattern.Visitor;
+import com.mycompany.cs3560.assignment2.DesignPatterns.VisitorPattern.VisitorClient;
 
-public class UserGroup implements Component{
+public class UserGroup implements Component, VisitorClient{
     private String userGroupID="";
     private ArrayList<Object> holder = new ArrayList<Object>();
 
@@ -55,6 +57,11 @@ public class UserGroup implements Component{
     
     public void setUserGroupID(String userGroupID) {
         this.userGroupID = userGroupID;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
 }

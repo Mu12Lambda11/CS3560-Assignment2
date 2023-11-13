@@ -7,10 +7,11 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-public class AdminControlPanel extends javax.swing.JFrame {
+import com.mycompany.cs3560.assignment2.DesignPatterns.VisitorPattern.Visitor;
+
+public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
     //data variables
     private static ArrayList<String> allMsgs = new ArrayList<String>();
-    private float posPercentage=0;
 
     //variables for holding total users
     private static Hashtable<String, User> allUsers = new Hashtable<>();
@@ -361,7 +362,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
     private void posPercentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_posPercentBtnActionPerformed
         posPercentDialog.setVisible(true);
-        posPercentText.setText("Positive Percent: ");
+        posPercentText.setText("Positive Percent: " + positivePercentageCheck());
     }//GEN-LAST:event_posPercentBtnActionPerformed
 
     private void userViewBtnActionPerformed(java.awt.event.ActionEvent evt){
@@ -440,7 +441,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
             if(selectedNode.getUserObject().toString().contains("(G)")){
                 selectedNode.add(userNode);
                 model.reload(rootNode);
-                allUsers.put(tempID, user);
+                user.accept(this);;
             }
         }
     }
@@ -452,7 +453,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
             DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group.getUserGroupID()+"(G)");
             selectedNode.add(groupNode);
             model.reload(rootNode);
-            allGroups.put(tempID, group);
+            group.accept(this);
         }
     }
 
@@ -462,11 +463,25 @@ public class AdminControlPanel extends javax.swing.JFrame {
         User tempUser = accessUser(userString);
         UserView tempUserView = new UserView(tempUser);
         tempUserView.setVisible(true);
-        allUserViews.put(tempUser, tempUserView);
+        tempUserView.accept(this);;
     }
 
     public static void gatherMessage(String givenMsg){
         allMsgs.add(givenMsg);
+    }
+
+    private float positivePercentageCheck(){
+        int positiveCounter=0;
+        for(String msg: allMsgs){
+            if(msg.toLowerCase().contains("cool")
+            ||msg.toLowerCase().contains("nice")
+            ||msg.toLowerCase().contains("good")
+            ||msg.toLowerCase().contains("great")){
+                positiveCounter++;
+            }
+        }
+
+        return positiveCounter/(allMsgs.size());
     }
 
     //Methods to access values in the hashtables
@@ -501,7 +516,21 @@ public class AdminControlPanel extends javax.swing.JFrame {
     public int getTotalGroups() {
         return allGroups.size();
     }
-    public float getPosPercentage() {
-        return posPercentage;
+
+    //Visitor Pattern Methods
+    @Override
+    public void visit(User user) {
+        allUsers.put(user.getUserID(),user);
     }
+
+    @Override
+    public void visit(UserGroup group) {
+        allGroups.put(group.getUserGroupID(), group);
+    }
+
+    @Override
+    public void visit(UserView userView) {
+        allUserViews.put(userView.getMyUser(), userView);
+    }
+
 }

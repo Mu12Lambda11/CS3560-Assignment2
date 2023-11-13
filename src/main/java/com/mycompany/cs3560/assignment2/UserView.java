@@ -5,7 +5,10 @@ import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 
-public class UserView extends javax.swing.JFrame {
+import com.mycompany.cs3560.assignment2.DesignPatterns.VisitorPattern.VisitorClient;
+import com.mycompany.cs3560.assignment2.DesignPatterns.VisitorPattern.Visitor;
+
+public class UserView extends javax.swing.JFrame implements VisitorClient {
 
     //Variable to hold the user
     User myUser=null;
@@ -239,7 +242,6 @@ public class UserView extends javax.swing.JFrame {
     private void postTweet(){
         String postContent = tweetField.getText();
         myUser.makePost(postContent);
-        AdminControlPanel.gatherMessage(postContent);
         updateNewsList();
         updateOthers();
     }
@@ -287,5 +289,14 @@ public class UserView extends javax.swing.JFrame {
             tempUserView.updateFollowList();
             tempUserView.updateNewsList();
         }
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+
+    public User getMyUser() {
+        return myUser;
     }
 }
