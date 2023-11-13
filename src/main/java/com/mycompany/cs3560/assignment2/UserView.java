@@ -1,12 +1,36 @@
 
 package com.mycompany.cs3560.assignment2;
 
+import java.util.ArrayList;
+
+import javax.swing.DefaultListModel;
+
 public class UserView extends javax.swing.JFrame {
+
+    //Variable to hold the user
+    User myUser=null;
+
+    //ListModels
+    DefaultListModel<String> followModel= new DefaultListModel<String>();
+    DefaultListModel<String> newsModel= new DefaultListModel<String>();
 
     /**
      * Creates new form AdminControlPanel
      */
-    public UserView() {
+    public UserView(User givenUser) {
+        myUser=givenUser;
+
+        ArrayList<String> tempArrayList=myUser.getUserFollowing();
+        for(String s: tempArrayList){
+            followModel.addElement(s);
+        }
+
+        tempArrayList=myUser.getUserNews();
+        for(String s: tempArrayList){
+            newsModel.addElement(s);
+        }
+
+
         initComponents();
     }
 
@@ -48,6 +72,7 @@ public class UserView extends javax.swing.JFrame {
         jTextField2.setText("jTextField2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle(myUser.getUserID()+"'s window");
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -66,11 +91,8 @@ public class UserView extends javax.swing.JFrame {
         });
 
         followList.setBackground(new java.awt.Color(102, 102, 102));
-        followList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        followList.setModel(followModel);
+        
         jScrollPane2.setViewportView(followList);
 
         tweetField.setBackground(new java.awt.Color(102, 102, 102));
@@ -88,11 +110,7 @@ public class UserView extends javax.swing.JFrame {
         });
 
         newsFeed.setBackground(new java.awt.Color(102, 102, 102));
-        newsFeed.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        newsFeed.setModel(newsModel);
         jScrollPane4.setViewportView(newsFeed);
 
         jTextField1.setText("jTextField1");
@@ -149,11 +167,11 @@ public class UserView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void followUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followUserBtnActionPerformed
-        // TODO add your handling code here:
+        followUser();
     }//GEN-LAST:event_followUserBtnActionPerformed
 
     private void postTweetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postTweetBtnActionPerformed
-        // TODO add your handling code here:
+        postTweet();
     }//GEN-LAST:event_postTweetBtnActionPerformed
 
     /**
@@ -189,7 +207,7 @@ public class UserView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UserView().setVisible(true);
+                new UserView(new User("sample")).setVisible(true);
             }
         });
     }
@@ -210,4 +228,18 @@ public class UserView extends javax.swing.JFrame {
     private javax.swing.JTextArea tweetField;
     private javax.swing.JTextArea userIDField;
     // End of variables declaration//GEN-END:variables
+
+    private void followUser(){
+        String tempID = userIDField.getText();
+        User tempUser = AdminControlPanel.accessUser(tempID);
+        myUser.follow(tempID, tempUser, myUser);
+        followList.validate();
+    }
+
+    private void postTweet(){
+        String postContent = tweetField.getText();
+        myUser.makePost(postContent);
+        AdminControlPanel.gatherMessage(postContent);
+        newsFeed.validate();
+    }
 }

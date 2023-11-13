@@ -29,10 +29,9 @@ public class User implements Component {
 
     //Observer method to observe followed posts
     public void updateFeed(String ID, String post){
-        Hashtable<String,User> allUsers= AdminControlPanel.getAllUsers();
-        ArrayList<String> followerNews = allUsers.get(ID).getUserNews();
+        ArrayList<String> followerNews = AdminControlPanel.accessUser(ID).getUserNews();
         followerNews.add(post);
-        allUsers.get(ID).setUserNews(followerNews);
+        AdminControlPanel.accessUser(ID).setUserNews(followerNews);
         
     }
     //Subject method to follow another user
@@ -64,13 +63,15 @@ public class User implements Component {
         this.userID = userID;
     }
 
-    
+    public ArrayList<String> getUserFollowing() {
+        return userFollowing;
+    }
 
-    public ArrayList getUserNews() {
+    public ArrayList<String> getUserNews() {
         return userNews;
     }
 
-    public void setUserNews(ArrayList userNews) {
+    public void setUserNews(ArrayList<String> userNews) {
         this.userNews = userNews;
     }
     

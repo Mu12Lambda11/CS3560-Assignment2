@@ -1,5 +1,6 @@
 package com.mycompany.cs3560.assignment2;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import javax.swing.JTree;
@@ -8,12 +9,12 @@ import javax.swing.tree.DefaultTreeModel;
 
 public class AdminControlPanel extends javax.swing.JFrame {
     //data variables
-    private int totalPosts=0;
+    private static ArrayList<String> allMsgs = new ArrayList<String>();
     private float posPercentage=0;
 
     //variables for holding total users
     private static Hashtable<String, User> allUsers = new Hashtable<>();
-    private Hashtable<String, UserGroup> allGroups = new Hashtable<>();
+    private static Hashtable<String, UserGroup> allGroups = new Hashtable<>();
 
     //tree variables
     UserGroup root=null;
@@ -37,27 +38,32 @@ public class AdminControlPanel extends javax.swing.JFrame {
         initComponents();
     }
 
-        //All the getters and setters
+    //Methods to access a given user or group in the hashtables
+    public static User accessUser(String givenID){
+        User tempUser = null;
+        if(allUsers.containsKey(givenID)){
+            tempUser = allUsers.get(givenID);
+        }
+        return tempUser;
+    }
+
+    public static UserGroup accessGroup(String givenID){
+        UserGroup tempGroup=null;
+        if(allGroups.containsKey(givenID)){
+            tempGroup=allGroups.get(givenID);
+        }
+        return tempGroup;
+    }
+
+    //All the getters and setters
     public int getTotalUsers() {
         return allUsers.size();
     }
     public int getTotalGroups() {
         return allGroups.size();
     }
-    public int getTotalPosts() {
-        return totalPosts;
-    }
-    public void setTotalPosts(int totalPosts) {
-        this.totalPosts = totalPosts;
-    }
     public float getPosPercentage() {
         return posPercentage;
-    }
-    public static Hashtable<String, User> getAllUsers() {
-        return allUsers;
-    }
-    public Hashtable<String, UserGroup> getAllGroups() {
-        return allGroups;
     }
 
     /**
@@ -85,7 +91,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
         //initilaize the root usergroup as the root node in jtree
         root = new UserGroup("Root");
         allGroups.put(root.getUserGroupID(), root);
-        rootNode = new DefaultMutableTreeNode(root.getUserGroupID()+"*G*");
+        rootNode = new DefaultMutableTreeNode(root.getUserGroupID()+"(G)");
         userGroupTree= new JTree(rootNode);
 
         //tree model to reload info when new nodes are added
@@ -375,7 +381,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
     private void msgTotalBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_msgTotalBtnActionPerformed
         msgTotalDialog.setVisible(true);
-        msgTotalText.setText("Total Messages: ");
+        msgTotalText.setText("Total Messages: " +allMsgs.size());
     }//GEN-LAST:event_msgTotalBtnActionPerformed
 
     private void posPercentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_posPercentBtnActionPerformed
@@ -449,34 +455,41 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private javax.swing.JButton userViewBtn;
     // End of variables declaration//GEN-END:variables
 
-    void makeUser(){
+    private void makeUser(){
         String tempID = userTextArea.getText();
         if(!allUsers.containsKey(tempID)){
             User user = new User(tempID);
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) userGroupTree.getSelectionPath().getLastPathComponent();
             DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user.getUserID());
             //Users can only be added to groups
-            if(selectedNode.getUserObject().toString().contains("*G*")){
+            if(selectedNode.getUserObject().toString().contains("(G)")){
                 selectedNode.add(userNode);
                 model.reload(rootNode);
                 allUsers.put(tempID, user);
             }
         }
     }
-    void makeGroup(){
+    private void makeGroup(){
         String tempID = groupTextArea.getText();
         if(!allGroups.containsKey(tempID)){
             UserGroup group = new UserGroup(tempID);
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) userGroupTree.getSelectionPath().getLastPathComponent();
-            DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group.getUserGroupID()+"*G*");
+            DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group.getUserGroupID()+"(G)");
             selectedNode.add(groupNode);
             model.reload(rootNode);
             allGroups.put(tempID, group);
         }
     }
 
-    void openUser(){
+    private void openUser(){
+        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) userGroupTree.getSelectionPath().getLastPathComponent();
+        String userString = selectedNode.getUserObject().toString();
+        User tempUser = accessUser(userString);
+        new UserView(tempUser).setVisible(true);;
+    }
 
+    public static void gatherMessage(String givenMsg){
+        allMsgs.add(givenMsg);
     }
 
 }
