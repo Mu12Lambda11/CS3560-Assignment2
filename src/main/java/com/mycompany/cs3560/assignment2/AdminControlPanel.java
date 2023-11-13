@@ -4,6 +4,7 @@ import java.util.Hashtable;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 public class AdminControlPanel extends javax.swing.JFrame {
     //data variables
@@ -14,9 +15,10 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private static Hashtable<String, User> allUsers = new Hashtable<>();
     private Hashtable<String, UserGroup> allGroups = new Hashtable<>();
 
-    //root and rootNode
+    //tree variables
     UserGroup root=null;
     DefaultMutableTreeNode rootNode=null;
+    DefaultTreeModel model = null;
 
     //singleton
     protected static AdminControlPanel instance = null;
@@ -85,6 +87,9 @@ public class AdminControlPanel extends javax.swing.JFrame {
         allGroups.put(root.getUserGroupID(), root);
         rootNode = new DefaultMutableTreeNode(root.getUserGroupID()+"*G*");
         userGroupTree= new JTree(rootNode);
+
+        //tree model to reload info when new nodes are added
+        model = (DefaultTreeModel)userGroupTree.getModel();
 
         userViewBtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -213,6 +218,11 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
         userViewBtn.setBackground(new java.awt.Color(51, 102, 255));
         userViewBtn.setText("Open User View");
+        userViewBtn.addActionListener(new java.awt.event.ActionListener(){
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+                userViewBtnActionPerformed(evt);
+            }
+        });
 
         userTextArea.setBackground(new java.awt.Color(153, 204, 255));
         userTextArea.setColumns(20);
@@ -373,6 +383,9 @@ public class AdminControlPanel extends javax.swing.JFrame {
         posPercentText.setText("Positive Percent: ");
     }//GEN-LAST:event_posPercentBtnActionPerformed
 
+    private void userViewBtnActionPerformed(java.awt.event.ActionEvent evt){
+        openUser();
+    }
 
     /**
      * @param args the command line arguments
@@ -438,20 +451,32 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
     void makeUser(){
         String tempID = userTextArea.getText();
-        User user = new User(tempID);
-        allUsers.put(tempID, user);
-        DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user.getUserID());
-        rootNode.add(userNode);
-
-
+        if(!allUsers.containsKey(tempID)){
+            User user = new User(tempID);
+            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) userGroupTree.getSelectionPath().getLastPathComponent();
+            DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user.getUserID());
+            //Users can only be added to groups
+            if(selectedNode.getUserObject().toString().contains("*G*")){
+                selectedNode.add(userNode);
+                model.reload(rootNode);
+                allUsers.put(tempID, user);
+            }
+        }
     }
     void makeGroup(){
         String tempID = groupTextArea.getText();
-        UserGroup group = new UserGroup(tempID);
-        allGroups.put(tempID, group);
-        DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group.getUserGroupID()+"*G*");
-        rootNode.add(groupNode);
-        
+        if(!allGroups.containsKey(tempID)){
+            UserGroup group = new UserGroup(tempID);
+            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) userGroupTree.getSelectionPath().getLastPathComponent();
+            DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group.getUserGroupID()+"*G*");
+            selectedNode.add(groupNode);
+            model.reload(rootNode);
+            allGroups.put(tempID, group);
+        }
+    }
+
+    void openUser(){
+
     }
 
 }
