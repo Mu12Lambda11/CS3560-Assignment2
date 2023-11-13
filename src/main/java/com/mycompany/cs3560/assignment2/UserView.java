@@ -20,16 +20,8 @@ public class UserView extends javax.swing.JFrame {
     public UserView(User givenUser) {
         myUser=givenUser;
 
-        ArrayList<String> tempArrayList=myUser.getUserFollowing();
-        for(String s: tempArrayList){
-            followModel.addElement(s);
-        }
-
-        tempArrayList=myUser.getUserNews();
-        for(String s: tempArrayList){
-            newsModel.addElement(s);
-        }
-
+        updateFollowList();
+        updateNewsList();
 
         initComponents();
     }
@@ -71,7 +63,7 @@ public class UserView extends javax.swing.JFrame {
 
         jTextField2.setText("jTextField2");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    
         setTitle(myUser.getUserID()+"'s window");
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
@@ -229,17 +221,71 @@ public class UserView extends javax.swing.JFrame {
     private javax.swing.JTextArea userIDField;
     // End of variables declaration//GEN-END:variables
 
+    //Method to follow another user
     private void followUser(){
         String tempID = userIDField.getText();
         User tempUser = AdminControlPanel.accessUser(tempID);
-        myUser.follow(tempID, tempUser, myUser);
-        followList.validate();
+        if(tempUser!=null){
+            myUser.follow(tempID, tempUser, myUser);
+            
+        }else{
+            System.out.println("no known user with that ID exists");
+        }
+        updateFollowList();
+        updateOthers();    
     }
 
+    //Method to make a post from the user
     private void postTweet(){
         String postContent = tweetField.getText();
         myUser.makePost(postContent);
         AdminControlPanel.gatherMessage(postContent);
-        newsFeed.validate();
+        updateNewsList();
+        updateOthers();
+    }
+
+    //Method to update the contents of the follow list
+    public void updateFollowList(){
+        //empty out the model
+        followModel.clear();
+
+        //refill the model to match the user's following list
+        ArrayList<String> tempArrayList=myUser.getUserFollowing();
+        for(String s: tempArrayList){
+        followModel.addElement(s);
+        }
+        
+        //followList will be null before init
+        //if(followList!=null)
+        //followList.revalidate();
+    }
+
+    //Method to update the contents of the news list
+    public void updateNewsList(){
+        //empty out the model
+        newsModel.clear();
+
+        //refill the model to match the user's news feed
+        ArrayList<String> tempArrayList=myUser.getUserFollowing();
+        tempArrayList=myUser.getUserNews();
+        for(String s: tempArrayList){
+        newsModel.addElement(s);
+        }
+        
+        
+        //newsFeed will be null before init
+        //if(newsFeed!=null)
+        //newsFeed.revalidate();
+    }
+
+    //Method to update any follower's UI automatically
+    private void updateOthers(){
+        ArrayList<String> followerList = myUser.getUserFollowers();
+        for(String ID: followerList){
+            User tempUser = AdminControlPanel.accessUser(ID);
+            UserView tempUserView = AdminControlPanel.accessUserView(tempUser);
+            tempUserView.updateFollowList();
+            tempUserView.updateNewsList();
+        }
     }
 }

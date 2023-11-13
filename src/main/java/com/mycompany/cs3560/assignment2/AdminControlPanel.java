@@ -14,6 +14,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
     //variables for holding total users
     private static Hashtable<String, User> allUsers = new Hashtable<>();
+    private static Hashtable<User,UserView> allUserViews = new Hashtable<>();
     private static Hashtable<String, UserGroup> allGroups = new Hashtable<>();
 
     //tree variables
@@ -38,33 +39,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
         initComponents();
     }
 
-    //Methods to access a given user or group in the hashtables
-    public static User accessUser(String givenID){
-        User tempUser = null;
-        if(allUsers.containsKey(givenID)){
-            tempUser = allUsers.get(givenID);
-        }
-        return tempUser;
-    }
-
-    public static UserGroup accessGroup(String givenID){
-        UserGroup tempGroup=null;
-        if(allGroups.containsKey(givenID)){
-            tempGroup=allGroups.get(givenID);
-        }
-        return tempGroup;
-    }
-
-    //All the getters and setters
-    public int getTotalUsers() {
-        return allUsers.size();
-    }
-    public int getTotalGroups() {
-        return allGroups.size();
-    }
-    public float getPosPercentage() {
-        return posPercentage;
-    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -485,11 +460,48 @@ public class AdminControlPanel extends javax.swing.JFrame {
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) userGroupTree.getSelectionPath().getLastPathComponent();
         String userString = selectedNode.getUserObject().toString();
         User tempUser = accessUser(userString);
-        new UserView(tempUser).setVisible(true);;
+        UserView tempUserView = new UserView(tempUser);
+        tempUserView.setVisible(true);
+        allUserViews.put(tempUser, tempUserView);
     }
 
     public static void gatherMessage(String givenMsg){
         allMsgs.add(givenMsg);
     }
 
+    //Methods to access values in the hashtables
+    public static User accessUser(String givenID){
+        User tempUser = null;
+        if(allUsers.containsKey(givenID)){
+            tempUser = allUsers.get(givenID);
+        }
+        return tempUser;
+    }
+
+    public static UserGroup accessGroup(String givenID){
+        UserGroup tempGroup=null;
+        if(allGroups.containsKey(givenID)){
+            tempGroup=allGroups.get(givenID);
+        }
+        return tempGroup;
+    }
+
+    public static UserView accessUserView(User givenUser){
+        UserView tempUserView=null;
+        if(allUserViews.containsKey(givenUser)){
+            tempUserView=allUserViews.get(givenUser);
+        }
+        return tempUserView;
+    }
+    
+    //All the getters and setters
+    public int getTotalUsers() {
+        return allUsers.size();
+    }
+    public int getTotalGroups() {
+        return allGroups.size();
+    }
+    public float getPosPercentage() {
+        return posPercentage;
+    }
 }

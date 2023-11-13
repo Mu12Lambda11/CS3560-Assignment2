@@ -11,7 +11,7 @@ public class User implements Component {
     private ArrayList<String> userFollowing = new ArrayList<String>();
     private ArrayList<String> userNews = new ArrayList<String>();
 
-    //Constructor Patterns
+    //Constructor 
     User(String givenID){
         userID=givenID;
     }
@@ -20,6 +20,7 @@ public class User implements Component {
 
     //subject method to make a post
     public void makePost(String post){
+        post= userID+": "+post;
         userNews.add(post);
         for(String ID: userFollowers){
             updateFeed(ID, post);
@@ -36,10 +37,10 @@ public class User implements Component {
     }
     //Subject method to follow another user
     public void follow(String givenID, User givenUser, User requestingUser){
-        if(!userFollowing.contains(givenID)){
+        if(!userFollowing.contains(givenID)&&givenUser!=null){
             userFollowing.add(givenID);
         }
-        givenUser.updateFollowers(givenID, requestingUser);
+        givenUser.updateFollowers(requestingUser.getUserID(), requestingUser);
     }
     //Observer response method to being followed
     public void updateFollowers(String givenID, User givenUser){
@@ -59,12 +60,12 @@ public class User implements Component {
         return userID;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-
     public ArrayList<String> getUserFollowing() {
         return userFollowing;
+    }
+
+    public ArrayList<String> getUserFollowers() {
+        return userFollowers;
     }
 
     public ArrayList<String> getUserNews() {
