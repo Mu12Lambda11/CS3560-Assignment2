@@ -481,7 +481,7 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
             }
         }
 
-        return (positiveCounter*100)/(allMsgs.size());
+        return (positiveCounter) / (allMsgs.size());
     }
 
     //Methods to access values in the hashtables
