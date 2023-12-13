@@ -1,5 +1,6 @@
 package com.mycompany.cs3560.assignment2;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import com.mycompany.cs3560.assignment2.DesignPatterns.CompositePattern.Component;
@@ -11,6 +12,8 @@ public class User implements Component, VisitorClient {
     private ArrayList<String> userFollowers= new ArrayList<String>();
     private ArrayList<String> userFollowing = new ArrayList<String>();
     private ArrayList<String> userNews = new ArrayList<String>();
+    private LocalTime creationTime=null;
+    private LocalTime lastUpdateTime=null;
 
     //Constructor 
     User(String givenID){
@@ -75,6 +78,19 @@ public class User implements Component, VisitorClient {
 
     public void setUserNews(ArrayList<String> userNews) {
         this.userNews = userNews;
+    }
+
+    public void setCreationTime(LocalTime creationTime) {
+        this.creationTime = creationTime;
+    }
+    public LocalTime getCreationTime() {
+        return creationTime;
+    }
+    public void setLastUpdateTime(LocalTime lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
+    }
+    public LocalTime getLastUpdateTime() {
+        return lastUpdateTime;
     }
 
     @Override

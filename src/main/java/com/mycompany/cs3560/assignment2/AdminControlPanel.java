@@ -1,6 +1,8 @@
 package com.mycompany.cs3560.assignment2;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 
 import javax.swing.JTree;
@@ -17,6 +19,12 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
     private static Hashtable<String, User> allUsers = new Hashtable<>();
     private static Hashtable<User,UserView> allUserViews = new Hashtable<>();
     private static Hashtable<String, UserGroup> allGroups = new Hashtable<>();
+
+    //variables for recent users and groups
+    private User recentUser = null;
+
+    //validation variable
+    private boolean areIDsValid=true;
 
     //tree variables
     UserGroup root=null;
@@ -59,6 +67,10 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
         msgTotalText = new javax.swing.JTextField();
         posPercentDialog = new javax.swing.JDialog();
         posPercentText = new javax.swing.JTextField();
+        activeUserDialog = new javax.swing.JDialog();
+        activeUserText= new javax.swing.JTextField();
+        verifyIDsDialog = new javax.swing.JDialog();
+        verifyIDsText = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -84,6 +96,8 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
         posPercentBtn = new javax.swing.JButton();
         addUserBtn = new javax.swing.JButton();
         addGroupBtn = new javax.swing.JButton();
+        activeUserBtn = new javax.swing.JButton();
+        verifyIDsBtn = new javax.swing.JButton();
 
         userTotalDialog.setTitle("User Total");
 
@@ -179,6 +193,52 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
                 .addContainerGap(110, Short.MAX_VALUE))
         );
         posPercentDialog.pack();
+        
+        activeUserDialog.setTitle("Recent Users and Groups");
+
+        activeUserText.setEditable(false);
+        activeUserText.setText("Please create a new user and group");
+
+        javax.swing.GroupLayout activeUserDialogLayout = new javax.swing.GroupLayout(activeUserDialog.getContentPane());
+        activeUserDialog.getContentPane().setLayout(activeUserDialogLayout);
+        activeUserDialogLayout.setHorizontalGroup(
+            activeUserDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(activeUserDialogLayout.createSequentialGroup()
+                .addGap(138, 138, 138)
+                .addComponent(activeUserText, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(138, Short.MAX_VALUE))
+        );
+        activeUserDialogLayout.setVerticalGroup(
+            activeUserDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(activeUserDialogLayout.createSequentialGroup()
+                .addGap(110, 110, 110)
+                .addComponent(activeUserText, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(110, Short.MAX_VALUE))
+        );
+        activeUserDialog.pack();
+
+        verifyIDsDialog.setTitle("Verify IDs");
+
+        verifyIDsText.setEditable(false);
+        verifyIDsText.setText("IDs are unverified");
+
+        javax.swing.GroupLayout verifyIDsDialogLayout = new javax.swing.GroupLayout(verifyIDsDialog.getContentPane());
+        verifyIDsDialog.getContentPane().setLayout(verifyIDsDialogLayout);
+        verifyIDsDialogLayout.setHorizontalGroup(
+            verifyIDsDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(verifyIDsDialogLayout.createSequentialGroup()
+                .addGap(138, 138, 138)
+                .addComponent(verifyIDsText, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(138, Short.MAX_VALUE))
+        );
+        verifyIDsDialogLayout.setVerticalGroup(
+            verifyIDsDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(verifyIDsDialogLayout.createSequentialGroup()
+                .addGap(110, 110, 110)
+                .addComponent(verifyIDsText, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(110, Short.MAX_VALUE))
+        );
+        verifyIDsDialog.pack();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -266,6 +326,22 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
             }
         });
 
+        activeUserBtn.setBackground(new java.awt.Color(51, 102, 255));
+        activeUserBtn.setText("<html> Show Last Active User </html>");
+        activeUserBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                activeUserBtnActionPerformed(evt);
+            }
+        });
+
+        verifyIDsBtn.setBackground(new java.awt.Color(51, 102, 255));
+        verifyIDsBtn.setText("<html> Validate IDs </html>");
+        verifyIDsBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                verifyIDsBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -274,34 +350,37 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(addUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(userViewBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(addGroupBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(addUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(userTotalBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(activeUserBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(userTotalBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addComponent(groupTotalBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(groupTotalBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+                            .addComponent(verifyIDsBtn)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(msgTotalBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(posPercentBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addComponent(userViewBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(addGroupBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(31, Short.MAX_VALUE))
+                        .addComponent(posPercentBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(104, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(addUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
@@ -312,15 +391,20 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
                             .addComponent(addGroupBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(userViewBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(145, 145, 145)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(activeUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                            .addComponent(verifyIDsBtn))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(groupTotalBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
                             .addComponent(userTotalBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(posPercentBtn)
-                            .addComponent(msgTotalBtn))
-                        .addGap(41, 41, 41))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(msgTotalBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(posPercentBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -336,6 +420,13 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void activeUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activeUserBtnActionPerformed
+
+        checkRecentUser();
+        activeUserDialog.setVisible(true);
+        activeUserText.setText("Last Updated User: " + getRecentUser().getUserID());
+    }//GEN-LAST:event_activeUserBtnActionPerformed
 
     private void addUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserBtnActionPerformed
         makeUser();
@@ -368,6 +459,10 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
     private void userViewBtnActionPerformed(java.awt.event.ActionEvent evt){
         openUser();
     }
+    private void verifyIDsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verifyIDsBtnActionPerformed
+        verifyIDs();
+    }//GEN-LAST:event_verifyIDsBtnActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -406,6 +501,9 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton activeUserBtn;
+    private javax.swing.JDialog activeUserDialog;
+    private javax.swing.JTextField activeUserText;
     private javax.swing.JButton addGroupBtn;
     private javax.swing.JButton addUserBtn;
     private javax.swing.JTextArea groupTextArea;
@@ -429,12 +527,23 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
     private javax.swing.JDialog userTotalDialog;
     private javax.swing.JTextField userTotalText;
     private javax.swing.JButton userViewBtn;
+    private javax.swing.JButton verifyIDsBtn;
+    private javax.swing.JDialog verifyIDsDialog;
+    private javax.swing.JTextField verifyIDsText;
+
+
     // End of variables declaration//GEN-END:variables
 
     private void makeUser(){
         String tempID = userTextArea.getText();
         if(!allUsers.containsKey(tempID)){
             User user = new User(tempID);
+            //set creation time
+            user.setCreationTime(LocalTime.now());
+            //Test to see if userID is valid
+            if(tempID.contains(" ")){
+                areIDsValid=false;
+            }
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) userGroupTree.getSelectionPath().getLastPathComponent();
             DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user.getUserID());
             //Users can only be added to groups
@@ -449,6 +558,12 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
         String tempID = groupTextArea.getText();
         if(!allGroups.containsKey(tempID)){
             UserGroup group = new UserGroup(tempID);
+            //set creation time
+            group.setCreationTime(System.currentTimeMillis());
+            //Test to see if userID is valid
+            if(tempID.contains(" ")){
+                areIDsValid=false;
+            }
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) userGroupTree.getSelectionPath().getLastPathComponent();
             DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group.getUserGroupID()+"(G)");
             selectedNode.add(groupNode);
@@ -484,6 +599,27 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
         return (positiveCounter*100) / (allMsgs.size());
     }
 
+    private void checkRecentUser() {
+        Collection<User> tempAllUsers = allUsers.values();
+        LocalTime tempLong = LocalTime.of(0,0,0);
+        for (User user : tempAllUsers) {
+            if(tempLong.isBefore(user.getLastUpdateTime())){
+                tempLong=user.getLastUpdateTime();
+                setRecentUser(user);
+            }
+        }
+    }
+
+    private void verifyIDs() {
+        verifyIDsDialog.setVisible(true);
+        if(areIDsValid){
+            verifyIDsText.setText("ID's are all valid");
+        }else{
+            verifyIDsText.setText("An ID is invalid");
+        }
+        
+    }
+
     //Methods to access values in the hashtables
     public static User accessUser(String givenID){
         User tempUser = null;
@@ -515,6 +651,12 @@ public class AdminControlPanel extends javax.swing.JFrame implements Visitor {
     }
     public int getTotalGroups() {
         return allGroups.size();
+    }
+    public User getRecentUser() {
+        return recentUser;
+    }
+    public void setRecentUser(User recentUser) {
+        this.recentUser = recentUser;
     }
 
     //Visitor Pattern Methods

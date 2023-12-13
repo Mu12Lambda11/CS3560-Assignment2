@@ -9,6 +9,7 @@ import com.mycompany.cs3560.assignment2.DesignPatterns.VisitorPattern.VisitorCli
 public class UserGroup implements Component, VisitorClient{
     private String userGroupID="";
     private ArrayList<Object> holder = new ArrayList<Object>();
+    private Long creationTime = 999L;
 
     //Constructor
     UserGroup(String givenID){
@@ -57,6 +58,12 @@ public class UserGroup implements Component, VisitorClient{
     
     public void setUserGroupID(String userGroupID) {
         this.userGroupID = userGroupID;
+    }
+    public void setCreationTime(Long creationTime) {
+        this.creationTime = creationTime;
+    }
+    public Long getCreationTime() {
+        return creationTime;
     }
 
     @Override

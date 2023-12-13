@@ -1,6 +1,7 @@
 
 package com.mycompany.cs3560.assignment2;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
@@ -23,10 +24,12 @@ public class UserView extends javax.swing.JFrame implements VisitorClient {
     public UserView(User givenUser) {
         myUser=givenUser;
 
+        initComponents();
+
         updateFollowList();
         updateNewsList();
-
-        initComponents();
+        updateUserTimes();
+        
     }
 
     /**
@@ -52,6 +55,10 @@ public class UserView extends javax.swing.JFrame implements VisitorClient {
         jScrollPane4 = new javax.swing.JScrollPane();
         newsFeed = new javax.swing.JList<>();
         jTextField1 = new javax.swing.JTextField();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        userTime = new javax.swing.JTextArea();
+        
+
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -110,6 +117,12 @@ public class UserView extends javax.swing.JFrame implements VisitorClient {
 
         jTextField1.setText("jTextField1");
 
+        userTime.setBackground(new java.awt.Color(0, 204, 204));
+        userTime.setColumns(20);
+        userTime.setRows(5);
+        userTime.setText("User was created at:");
+        jScrollPane5.setViewportView(userTime);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -118,15 +131,18 @@ public class UserView extends javax.swing.JFrame implements VisitorClient {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4)
-                    .addComponent(jScrollPane2)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(followUserBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(postTweetBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(postTweetBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(followUserBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -136,15 +152,17 @@ public class UserView extends javax.swing.JFrame implements VisitorClient {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(followUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane3)
                     .addComponent(postTweetBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -216,12 +234,14 @@ public class UserView extends javax.swing.JFrame implements VisitorClient {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JList<String> newsFeed;
     private javax.swing.JButton postTweetBtn;
     private javax.swing.JTextArea tweetField;
     private javax.swing.JTextArea userIDField;
+    private javax.swing.JTextArea userTime;
     // End of variables declaration//GEN-END:variables
 
     //Method to follow another user
@@ -264,6 +284,9 @@ public class UserView extends javax.swing.JFrame implements VisitorClient {
 
     //Method to update the contents of the news list
     public void updateNewsList(){
+        //update times
+        updateUserTimes();
+
         //empty out the model
         newsModel.clear();
 
@@ -278,6 +301,23 @@ public class UserView extends javax.swing.JFrame implements VisitorClient {
         //newsFeed will be null before init
         //if(newsFeed!=null)
         //newsFeed.revalidate();
+    }
+
+    //Method to show time parameters
+    public void showUserTimes(){
+        userTime.setText("Creation Time:"+myUser.getCreationTime().toString()
+                        +"\nLastUpdate Time: "+ myUser.getLastUpdateTime().toString());
+    }
+
+    //Method to update the update time
+    public void setUpdateTime(){
+        myUser.setLastUpdateTime(LocalTime.now());
+    }
+
+    //Method to update time parameters
+    public void updateUserTimes(){
+        setUpdateTime();
+        showUserTimes();
     }
 
     //Method to update any follower's UI automatically
